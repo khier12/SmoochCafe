@@ -16,35 +16,51 @@
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <!-- ========== UPDATED HEADER ========== -->
     <header>
         <div class="container header-container">
-            <!-- old logo style
+
+            <!-- logo (uses the uploaded file) -->
             <a href="#" class="logo">
-                <i class="fa-solid fa-mug-hot logo-icon"></i>
-                <div class="logo-text">SMOOCH<span>CAFE</span></div>
-            </a> -->
-            <a href="#" class="logo">
-                <img
-                  src="logo.png"
-                  alt="SMOOCH CAFE logo"
-                  class="logo-img" />
+                <img src="logo.png" alt="SMOOCH CAFE logo" class="logo-img" />
                 <span class="sr-only">SMOOCH CAFE</span>
-              </a>
-              
-            <nav>
+            </a>
+
+            <!-- hamburger toggle (mobile) -->
+            <button class="nav-toggle" aria-expanded="false" aria-label="Open navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- main nav (desktop + mobile drawer) -->
+            <nav class="nav-menu" id="primary-nav" aria-label="Primary">
                 <ul>
                     <li><a href="#">Home</a></li>
                     <li><a href="#products">Products</a></li>
                     <li><a href="#">Locations</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
+
+                <!-- put these inside mobile drawer only (desktop copy shown separately) -->
+                <div class="nav-buttons mobile-buttons">
+                    <a href="#" class="btn btn-secondary">Sign In</a>
+                    <a href="#" class="btn btn-primary">Order Online</a>
+                </div>
             </nav>
-            <div class="nav-buttons">
+
+            <!-- desktop-only buttons -->
+            <div class="nav-buttons desktop-buttons">
                 <a href="#" class="btn btn-secondary">Sign In</a>
                 <a href="#" class="btn btn-primary">Order Online</a>
             </div>
         </div>
+
+        <!-- overlay -->
+        <div class="nav-overlay" aria-hidden="true"></div>
     </header>
+      
+    
 
     <section class="hero">
         <div class="container">
