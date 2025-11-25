@@ -111,31 +111,57 @@
   
   /* ---------- Mobile nav styles (hamburger & drawer) ---------- */
   
-  /* visually hidden helper if needed */
+  /* visually hidden helper */
   .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
   
-  /* nav-toggle (hamburger) */
-  .nav-toggle { display:none; background:transparent; border:0; padding:6px; cursor:pointer; align-items:center; justify-content:center; z-index:3000; }
+  /* nav-toggle (hamburger container) */
+  .nav-toggle {
+    display: none;              /* shown on mobile by media query */
+    width: 44px;
+    height: 36px;
+    padding: 6px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+  }
+  
+  /* bars wrapper */
   .nav-toggle .bars { width:28px; height:22px; display:inline-block; position:relative; }
-  .nav-toggle .bars span { position:absolute; left:0; right:0; height:3.5px; background:#fff; border-radius:3px; transition:transform .28s ease, opacity .2s ease; }
-  .nav-toggle .bars span:nth-child(1) { top:0; }
-  .nav-toggle .bars span:nth-child(2) { top:50%; transform:translateY(-50%); }
-  .nav-toggle .bars span:nth-child(3) { bottom:0; }
   
-  /* overlay hidden by default */
-  .nav-overlay { position:fixed; inset:0; background: rgba(0,0,0,0.55); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:2500; }
+  /* bars inside wrapper */
+  .nav-toggle .bars span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #ffffff;       /* white bars on dark header */
+    border-radius: 3px;
+    transition: transform .28s ease, opacity .2s ease;
+  }
+  .nav-toggle .bars span:nth-child(1) { top: 0; }
+  .nav-toggle .bars span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+  .nav-toggle .bars span:nth-child(3) { bottom: 0; }
   
-  /* mobile drawer hidden (off-canvas) */
+  /* overlay */
+  .nav-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); opacity: 0; pointer-events: none; transition: opacity .25s ease; z-index: 2500; }
+  
+  /* nav default (desktop) */
+  .nav-menu { display:flex; align-items:center; gap:35px; }
+  .nav-menu ul { display:flex; list-style:none; gap:35px; padding:0; margin:0; }
+  
+  /* mobile drawer */
   @media (max-width: 900px) {
     .nav-toggle { display:flex; }
   
-    /* hide desktop buttons on mobile */
-    .desktop-buttons { display:none; }
+    .desktop-buttons { display: none; } /* hide desktop buttons on mobile */
   
     .nav-menu {
       position: fixed;
       top: 0;
-      right: -320px;
+      right: -320px;           /* off-canvas */
       width: 320px;
       height: 100vh;
       background: linear-gradient(180deg, rgba(10,73,82,0.98), rgba(6,31,34,0.98));
@@ -149,11 +175,11 @@
       box-shadow: -20px 0 40px rgba(0,0,0,0.45);
     }
   
-    .nav-menu ul { flex-direction: column; gap:18px; display:flex; list-style:none; padding:0; margin:0; width:100%; }
+    .nav-menu ul { flex-direction: column; gap: 18px; display:flex; list-style:none; padding:0; margin:0; width:100%; }
     .nav-menu a { font-size:18px; color:var(--coffee-light); padding:8px 0; display:inline-block; }
-  
     .mobile-buttons { width:100%; display:flex; flex-direction:column; gap:12px; margin-top:12px; }
   
+    /* show when active */
     .nav-menu.active { right: 0; }
     .nav-overlay.active { opacity: 1; pointer-events: auto; }
   
@@ -162,11 +188,11 @@
     .nav-toggle.active .bars span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .nav-toggle.active .bars span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
   
-    .logo-img { height:44px; }
+    .logo-img { height: 44px; }
   }
   
-  /* hide mobile-only inside desktop */
-  @media (min-width:901px) {
-    .mobile-buttons { display:none; }
+  /* ensure mobile-buttons are hidden on desktop */
+  @media (min-width: 901px) {
+    .mobile-buttons { display: none; }
   }
   
