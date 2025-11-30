@@ -63,38 +63,91 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // for dropdown menu
-  function filterCategory() {
-    const selected = document.getElementById("filterSelect").value;
+function filterCategory() {
+  const selected = document.getElementById("filterSelect").value;
 
-    const foodSection = document.getElementById("food");
-    const drinksSection = document.getElementById("drinks");
+  const foodSection   = document.getElementById("food");
+  const pastrySection = document.getElementById("pastry");
+  const drinksSection = document.getElementById("drinks");
 
-    // Categories inside each section
-    const foodCats = ["quarter-pounder","sandwiches","quesadilla","fries","rice-bowls","pasta","nachos"];
-    const drinkCats = ["coffee","non-coffee","ice-blended","lava-series","chilled","dessert-drinks"];
+  const foodCats   = ["quarter-pounder","sandwiches","quesadilla","fries","rice-bowls","pasta","nachos"];
+  const pastryCats = ["pastry-brownies","pastry-cookies","pastry-muffins","pastry-cakes"];
+  const drinkCats  = ["coffee","non-coffee","ice-blended","lava-series","chilled","dessert-drinks"];
 
-    // --- SHOW ALL ---
-    if(selected === "all"){
-        foodSection.style.display = "block";
-        drinksSection.style.display = "block";
-        document.querySelectorAll(".menu-category").forEach(sec => sec.style.display = "block");
-        return;
-    }
+  // helper: show/hide whole sections
+  function showSections(showFood, showPastry, showDrinks) {
+    foodSection.style.display   = showFood   ? "block" : "none";
+    pastrySection.style.display = showPastry ? "block" : "none";
+    drinksSection.style.display = showDrinks ? "block" : "none";
+  }
 
-    // --- FOOD categories selected ---
-    if(foodCats.includes(selected)){
-        foodSection.style.display = "block";
-        drinksSection.style.display = "none";
+  // helper: show all categories inside a given list (by id)
+  function showAllCategories(ids) {
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "block";
+    });
+  }
 
-        foodCats.forEach(id => document.getElementById(id).style.display = (id === selected ? "block" : "none"));
-        return;
-    }
+  // helper: show only one category from a group
+  function showOnlyCategory(ids, targetId) {
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = (id === targetId) ? "block" : "none";
+    });
+  }
 
-    // --- DRINK categories selected ---
-    if(drinkCats.includes(selected)){
-        drinksSection.style.display = "block";
-        foodSection.style.display = "none";
+  // RESET: show all categories first (we'll hide as needed)
+  document.querySelectorAll(".menu-category").forEach(sec => {
+    sec.style.display = "block";
+  });
 
-        drinkCats.forEach(id => document.getElementById(id).style.display = (id === selected ? "block" : "none"));
-    }
+  // 1) SHOW ALL
+  if (selected === "all") {
+    showSections(true, true, true);
+    return;
+  }
+
+  // 2) FOOD-ALL
+  if (selected === "food-all") {
+    showSections(true, false, false);
+    showAllCategories(foodCats);
+    return;
+  }
+
+  // 3) PASTRY-ALL
+  if (selected === "pastry-all") {
+    showSections(false, true, false);
+    showAllCategories(pastryCats);
+    return;
+  }
+
+  // 4) DRINKS-ALL
+  if (selected === "drinks-all") {
+    showSections(false, false, true);
+    showAllCategories(drinkCats);
+    return;
+  }
+
+  // 5) Specific FOOD category
+  if (foodCats.includes(selected)) {
+    showSections(true, false, false);
+    showOnlyCategory(foodCats, selected);
+    return;
+  }
+
+  // 6) Specific PASTRY category
+  if (pastryCats.includes(selected)) {
+    showSections(false, true, false);
+    showOnlyCategory(pastryCats, selected);
+    return;
+  }
+
+  // 7) Specific DRINK category
+  if (drinkCats.includes(selected)) {
+    showSections(false, false, true);
+    showOnlyCategory(drinkCats, selected);
+    return;
+  }
 }
