@@ -60,38 +60,44 @@
     <div class="nav-overlay" aria-hidden="true"></div>
   </header>
 
-<!-- Filter Dropdown Menu -->
- <!-- CATEGORY FILTER -->
- <div style="text-align:center; margin-top:120px;">
-  <label for="filterSelect"><strong>Food Category:</strong></label>
-  <select id="filterSelect" onchange="filterCategory()" style="padding:6px;">
-    <option value="all">Show All</option>
+<!-- MENU FILTER -->
+<section class="menu-filter">
+  <div class="container">
+    <div class="filter-wrapper">
+      <p class="filter-label">Food Category</p>
+      <p class="filter-helper">Quickly jump to any part of the menu.</p>
 
-    <option value="food-all">----- 🍔 All Foods -----</option>
-    <option value="quarter-pounder">Quarter Pounder</option>
-    <option value="sandwiches">Sandwiches</option>
-    <option value="quesadilla">Quesadilla</option>
-    <option value="fries">French Fries</option>
-    <option value="rice-bowls">Rice Bowls</option>
-    <option value="pasta">Pasta</option>
-    <option value="nachos">Nachos</option>
+      <div class="filter-select-wrap">
+        <select id="filterSelect" class="filter-select" onchange="filterCategory()">
+          <option value="all">Show All</option>
 
-    <option value="pastry-all">----- 🍰 All Pastries -----</option>
-    <option value="pastry-brownies">Brownies</option>
-    <option value="pastry-cookies">Cookies</option>
-    <option value="pastry-muffins">Muffins</option>
-    <option value="pastry-cakes">Cakes</option>
+          <option value="food-all">----- 🍔 All Foods -----</option>
+          <option value="quarter-pounder">Quarter Pounder</option>
+          <option value="sandwiches">Sandwiches</option>
+          <option value="quesadilla">Quesadilla</option>
+          <option value="fries">French Fries</option>
+          <option value="rice-bowls">Rice Bowls</option>
+          <option value="pasta">Pasta</option>
+          <option value="nachos">Nachos</option>
 
-    <option value="drinks-all">----- 🥤 All Drinks -----</option>
-    <option value="coffee">Coffee</option>
-    <option value="non-coffee">Non-Coffee</option>
-    <option value="ice-blended">Ice Blended</option>
-    <option value="lava-series">Lava Series</option>
-    <option value="chilled">Chilled Drinks</option>
-    <option value="dessert-drinks">Dessert Drinks</option>
-  </select>
-</div>
+          <option value="pastry-all">----- 🍰 All Pastries -----</option>
+          <option value="pastry-brownies">Brownies</option>
+          <option value="pastry-cookies">Cookies</option>
+          <option value="pastry-muffins">Muffins</option>
+          <option value="pastry-cakes">Cakes</option>
 
+          <option value="drinks-all">----- 🥤 All Drinks -----</option>
+          <option value="coffee">Coffee</option>
+          <option value="non-coffee">Non-Coffee</option>
+          <option value="ice-blended">Ice Blended</option>
+          <option value="lava-series">Lava Series</option>
+          <option value="chilled">Chilled Drinks</option>
+          <option value="dessert-drinks">Dessert Drinks</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 
@@ -1327,44 +1333,47 @@
   <footer id="footer">
     <div class="container">
       <div class="footer-content">
+  
+        <!-- ABOUT -->
         <div class="footer-column">
           <h3>About SMOOCH CAFE</h3>
           <p style="color: var(--coffee-accent); margin-bottom: 20px;">
-            Black Tea & Coffee lovers dedicated to quality, sustainability, and the perfect cup.
+            Black Tea roasters dedicated to quality, sustainability, and the perfect cup.
           </p>
           <div class="social-links">
-            <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61580172486900" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/smoochcafeph/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
             <a href="#" target="_blank"><i class="fa-brands fa-twitter"></i></a>
             <a href="#" target="_blank"><i class="fa-brands fa-pinterest"></i></a>
           </div>
         </div>
-
-        <div class="footer-column">
-          <h3>Quick Links</h3>
-          <ul class="footer-links">
-            <li><a href="index.html">Back to Home</a></li>
-            <li><a href="#food">Food Menu</a></li>
-            <li><a href="#pastry">Pastry Menu</a></li>
-            <li><a href="#drinks">Drinks Menu</a></li>
-            <li><a href="index.html#contact">Order / Inquiries</a></li>
-          </ul>
-        </div>
-
+  
+        <!-- CONTACT US = lahat ng details -->
         <div class="footer-column">
           <h3>Contact Us</h3>
           <ul class="footer-links">
-            <li><i class="fa-solid fa-location-dot"></i> Southville6, Kay-anlog, Calamba City</li>
-            <li><i class="fa-solid fa-phone"></i> (0991) 123 4567</li>
-            <li><i class="fa-solid fa-envelope"></i> syntaxx.error404@gmail.com</li>
-            <li><i class="fa-solid fa-clock"></i> Mon-Sun: 7am - 9pm</li>
+            <li><i class="fa-solid fa-location-dot"></i> 447 JM Loyola Street, Carmona, Philippines</li>
+            <li><i class="fa-solid fa-phone"></i> (0965) 760 8290</li>
+            <li><i class="fa-solid fa-envelope"></i> smoochcafe25@gmail.com</li>
+            <li><i class="fa-solid fa-clock"></i> Mon-Sun: 2 PM - 11 PM</li>
           </ul>
         </div>
+  
+        <!-- LOCATION = PURE MAP -->
+        <div class="footer-column" id="location">
+          <h3>Location</h3>
+          <div class="footer-map">
+            <!-- Palitan ang src ng sarili mong Google Maps embed code -->
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3865.964964918014!2d121.05430657573791!3d14.313467884040751!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397d75fd5146f33%3A0xb816cc7c52411983!2sSmooch%20Cafe!5e0!3m2!1sen!2sph!4v1764501343626!5m2!1sen!2sph" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          </div>
+        </div>
+  
       </div>
-
+  
       <div class="copyright footer-links">
         &copy; 2025 WITMWD3M2
-        <a href="https://www.facebook.com/khier.dixon/" target="_blank">Group3</a>. All rights reserved.
+        <a href="https://www.facebook.com/khier.dixon/" target="_blank">Group3</a>.
+        All rights reserved.
       </div>
     </div>
   </footer>
