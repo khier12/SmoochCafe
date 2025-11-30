@@ -346,3 +346,10 @@
     transform: translateY(-1px);
   }
   
+
+  /* Filter for Mobile View */
+  #filterSelect {
+    width: 100%;
+    max-width: 300px;
+  }
+  

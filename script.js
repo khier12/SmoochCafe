@@ -1,3 +1,26 @@
+// smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+
+// Product hover animation
+const productCards = document.querySelectorAll('.product-card');
+productCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-15px)';
+    });
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
+    });
+});
+
+// mobile view 
 document.addEventListener("DOMContentLoaded", () => {
     const toggle = document.querySelector(".nav-toggle");
     const nav = document.querySelector(".nav-menu");
@@ -37,3 +60,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   
+
+
+  // for dropdown menu
+  function filterCategory() {
+    const selected = document.getElementById("filterSelect").value;
+
+    const foodSection = document.getElementById("food");
+    const drinksSection = document.getElementById("drinks");
+
+    // Categories inside each section
+    const foodCats = ["quarter-pounder","sandwiches","quesadilla","fries","rice-bowls","pasta","nachos"];
+    const drinkCats = ["coffee","non-coffee","ice-blended","lava-series","chilled","dessert-drinks"];
+
+    // --- SHOW ALL ---
+    if(selected === "all"){
+        foodSection.style.display = "block";
+        drinksSection.style.display = "block";
+        document.querySelectorAll(".menu-category").forEach(sec => sec.style.display = "block");
+        return;
+    }
+
+    // --- FOOD categories selected ---
+    if(foodCats.includes(selected)){
+        foodSection.style.display = "block";
+        drinksSection.style.display = "none";
+
+        foodCats.forEach(id => document.getElementById(id).style.display = (id === selected ? "block" : "none"));
+        return;
+    }
+
+    // --- DRINK categories selected ---
+    if(drinkCats.includes(selected)){
+        drinksSection.style.display = "block";
+        foodSection.style.display = "none";
+
+        drinkCats.forEach(id => document.getElementById(id).style.display = (id === selected ? "block" : "none"));
+    }
+}
