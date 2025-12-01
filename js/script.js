@@ -314,10 +314,16 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCart();
   renderCart();
 });
+
+
 // =======================
 // SIMPLE CART FUNCTIONALITY
 // =======================
 document.addEventListener("DOMContentLoaded", () => {
+  // ✅ GUARD: huwag ulitin setup kung na-run na dati
+  if (window.__smoochCartInit) return;
+  window.__smoochCartInit = true;
+
   const STORAGE_KEY = "smoochCart";
   let cart = [];
 
@@ -329,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartClose    = document.getElementById("cart-close");
   const cartCheckout = document.getElementById("cart-checkout");
 
-  // kung wala sa page (hal. home page lang), wag na mag-run
+  // kung wala sa page (hal. ibang page), wag na mag-run
   if (!cartIcon || !cartModal) return;
 
   // --- helpers ---
@@ -396,14 +402,14 @@ document.addEventListener("DOMContentLoaded", () => {
     cartModal.classList.add("show");
     cartModal.setAttribute("aria-hidden", "false");
     cartIcon.setAttribute("aria-expanded", "true");
-    if (cartClose) cartClose.focus();   // focus sa close button
+    if (cartClose) cartClose.focus();
   }
 
   function closeCart() {
     cartModal.classList.remove("show");
     cartModal.setAttribute("aria-hidden", "true");
     cartIcon.setAttribute("aria-expanded", "false");
-    cartIcon.focus();                   // ibalik focus sa icon
+    cartIcon.focus();
   }
 
   // --- events ---
@@ -417,11 +423,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const originalText = btn.textContent;
 
     btn.addEventListener("click", () => {
-      if (!name || !price) return; // safety
+      if (!name || !price) return;
 
       addToCart(name, price);
 
-      // ⭐ mini feedback sa button
       btn.textContent = "Added!";
       btn.disabled = true;
 
@@ -482,15 +487,16 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCart();
   });
 
-  // fake checkout
-  // prevent double event binding
-cartCheckout.onclick = () => {
-  if (!cart.length) {
-    alert("Your cart is empty.");
-    return;
+  // ✅ fake checkout – single handler lang kahit ilang beses mag-run script
+  if (cartCheckout) {
+    cartCheckout.onclick = () => {
+      if (!cart.length) {
+        alert("Your cart is empty.");
+        return;
+      }
+      alert("Order placed! (demo only)");
+    };
   }
-  alert("Order placed! (demo only)");
-};
 
   // initial load
   loadCart();
