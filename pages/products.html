@@ -28,11 +28,25 @@
         <img src="../images/logo.png" alt="SMOOCH CAFE logo" class="logo-img" />
       </a>
 
-      <button class="nav-toggle" aria-expanded="false" aria-label="Open navigation">
-        <span class="bars">
-          <span></span><span></span><span></span>
-        </span>
-      </button>
+      <!-- CART & Burger Container-->
+      <div class="header-right">
+        <!-- CART ICON -->
+        <div class="cart-icon"
+     id="cart-icon"
+     role="button"
+     tabindex="0"
+     aria-label="View cart"
+     aria-expanded="false">
+  <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+  <span id="cart-count">0</span>
+</div>
+      
+        <!-- HAMBURGER -->
+        <button class="nav-toggle" aria-expanded="false">
+            <span class="bars"><span></span><span></span><span></span></span>
+        </button>
+      </div>
+      
 
       <nav class="nav-menu" id="primary-nav" aria-label="Primary navigation">
         <ul>
@@ -128,57 +142,63 @@
     <div class="menu-category" id="quarter-pounder">
       <h3 class="category-title">Quarter Pounder</h3>
       <div class="product-grid">
-        <div class="product-card">
+        
+        <div class="product-card"  data-name="Classic Burger" data-price="110">
           <div class="product-img"><img src="../images/1.png" alt="Classic Burger"></div>
           <div class="product-info">
             <div class="product-tag">Quarter Pounder</div>
             <h3 class="product-title">Classic Burger</h3>
             <div class="product-footer">
               <div class="product-price">P110.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Hawaiian Burger" data-price="125">
           <div class="product-img"><img src="../images/1.png" alt="Hawaiian Burger"></div>
           <div class="product-info">
             <div class="product-tag">Quarter Pounder</div>
             <h3 class="product-title">Hawaiian Burger</h3>
             <div class="product-footer">
               <div class="product-price">P125.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Sunrise Burger" data-price="150">
           <div class="product-img"><img src="../images/1.png" alt="Sunrise Burger"></div>
           <div class="product-info">
             <div class="product-tag">Quarter Pounder</div>
             <h3 class="product-title">Sunrise Burger</h3>
             <div class="product-footer">
               <div class="product-price">P150.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Bacon Cheese Burger" data-price="155">
           <div class="product-img"><img src="../images/1.png" alt="Bacon Cheese Burger"></div>
           <div class="product-info">
             <div class="product-tag">Quarter Pounder</div>
             <h3 class="product-title">Bacon Cheese Burger</h3>
             <div class="product-footer">
               <div class="product-price">P155.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Double Classic Burger" data-price="180">
           <div class="product-img"><img src="../images/1.png" alt="Double Classic Burger"></div>
           <div class="product-info">
             <div class="product-tag">Quarter Pounder</div>
             <h3 class="product-title">Double Classic Burger</h3>
             <div class="product-footer">
               <div class="product-price">P180.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -193,68 +213,74 @@
       <h3 class="category-title">Sandwiches</h3>
       <div class="product-grid">
         
-        <div class="product-card">
+        <div class="product-card" data-name="Classic Chicken" data-price="110">
           <div class="product-img"><img src="../images/1.png" alt="Classic Chicken Sandwich"></div>
           <div class="product-info">
             <div class="product-tag">Sandwiches</div>
             <h3 class="product-title">Classic Chicken</h3>
             <div class="product-footer">
               <div class="product-price">P110.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Club House" data-price="185">
           <div class="product-img"><img src="../images/1.png" alt="Club House"></div>
           <div class="product-info">
             <div class="product-tag">Sandwiches</div>
             <h3 class="product-title">Club House</h3>
             <div class="product-footer">
               <div class="product-price">P185.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Grilled Cheese" data-price="110">
           <div class="product-img"><img src="../images/1.png" alt="Grilled Cheese"></div>
           <div class="product-info">
             <div class="product-tag">Sandwiches</div>
             <h3 class="product-title">Grilled Cheese</h3>
             <div class="product-footer">
               <div class="product-price">P110.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Grilled Ham & Cheese" data-price="100">
           <div class="product-img"><img src="../images/1.png" alt="Grilled Ham & Cheese"></div>
           <div class="product-info">
             <div class="product-tag">Sandwiches</div>
             <h3 class="product-title">Grilled Ham & Cheese</h3>
             <div class="product-footer">
               <div class="product-price">P100.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Tuna Sandwich" data-price="125">
           <div class="product-img"><img src="../images/1.png" alt="Tuna Sandwich"></div>
           <div class="product-info">
             <div class="product-tag">Sandwiches</div>
             <h3 class="product-title">Tuna Sandwich</h3>
             <div class="product-footer">
               <div class="product-price">P125.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" data-name="Chicken Sandwich" data-price="130">
           <div class="product-img"><img src="../images/1.png" alt="Chicken Sandwich"></div>
           <div class="product-info">
             <div class="product-tag">Sandwiches</div>
             <h3 class="product-title">Chicken Sandwich</h3>
             <div class="product-footer">
               <div class="product-price">P130.00</div>
+              <button class="btn btn-primary add-to-cart">Add to Cart</button>
             </div>
           </div>
         </div>
@@ -1327,6 +1353,30 @@
 
   </div>
 </section>
+
+
+<div id="cart-modal" class="cart-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+  <div class="cart-modal-inner">
+    <h2 id="cart-title">Your Order</h2>
+    <ul id="cart-items"></ul>
+
+    <div class="cart-summary">
+      <span>Total:</span>
+      <span>P<span id="cart-total">0</span></span>
+    </div>
+
+    <div class="cart-actions">
+      <button class="btn btn-primary" id="cart-checkout" type="button">
+        Place Order
+      </button>
+      <button class="btn btn-secondary" id="cart-close" type="button">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+
 
 
   <!-- FOOTER -->
