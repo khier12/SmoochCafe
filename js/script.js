@@ -207,173 +207,6 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="cart-item-controls">
             <input type="number" min="1" value="${item.qty}" class="cart-item-qty">
-            <button class="cart-remove" title="Remove">&times;</button>
-          </div>
-        `;
-
-        cartItems.appendChild(li);
-      });
-    }
-
-    cartTotal.textContent = total.toFixed(2);
-    updateBadge();
-  }
-
-  function addToCart(name, price) {
-    const existing = cart.find(i => i.name === name);
-    if (existing) {
-      existing.qty += 1;
-    } else {
-      cart.push({ name, price, qty: 1 });
-    }
-    saveCart();
-    renderCart();
-  }
-
-  // --- events ---
-
-  // Add to cart buttons (products page) + MINI FEEDBACK
-  document.querySelectorAll(".add-to-cart").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const name  = btn.dataset.name;
-      const price = parseFloat(btn.dataset.price || "0");
-      addToCart(name, price);
-
-      // ⭐ mini feedback sa button
-      const originalText = btn.textContent;
-      btn.textContent = "Added!";
-      btn.disabled = true;
-
-      setTimeout(() => {
-        btn.textContent = originalText;
-        btn.disabled = false;
-      }, 1500);
-    });
-  });
-
-  // open / close cart modal
-  cartIcon.addEventListener("click", () => {
-    cartModal.classList.add("show");
-    cartModal.setAttribute("aria-hidden", "false");
-  });
-
-  cartClose.addEventListener("click", () => {
-    cartModal.classList.remove("show");
-    cartModal.setAttribute("aria-hidden", "true");
-  });
-
-  cartModal.addEventListener("click", (e) => {
-    if (e.target === cartModal) {
-      cartModal.classList.remove("show");
-      cartModal.setAttribute("aria-hidden", "true");
-    }
-  });
-
-  // ESC key para isara ang modal
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && cartModal.classList.contains("show")) {
-      cartModal.classList.remove("show");
-      cartModal.setAttribute("aria-hidden", "true");
-    }
-  });
-
-  // change qty / remove item (event delegation)
-  cartItems.addEventListener("click", (e) => {
-    const row = e.target.closest(".cart-item-row");
-    if (!row) return;
-    const index = parseInt(row.dataset.index, 10);
-
-    if (e.target.classList.contains("cart-remove")) {
-      cart.splice(index, 1);
-      saveCart();
-      renderCart();
-    }
-  });
-
-  cartItems.addEventListener("change", (e) => {
-    if (!e.target.classList.contains("cart-item-qty")) return;
-    const row = e.target.closest(".cart-item-row");
-    const index = parseInt(row.dataset.index, 10);
-    let qty = parseInt(e.target.value, 10);
-    if (isNaN(qty) || qty < 1) qty = 1;
-    cart[index].qty = qty;
-    saveCart();
-    renderCart();
-  });
-
-  // fake checkout
-  cartCheckout.addEventListener("click", () => {
-    if (!cart.length) {
-      alert("Your cart is empty.");
-      return;
-    }
-    alert("Order placed! (demo only)");
-  });
-
-  // initial load
-  loadCart();
-  renderCart();
-});
-
-
-// =======================
-// SIMPLE CART FUNCTIONALITY
-// =======================
-document.addEventListener("DOMContentLoaded", () => {
-  // ✅ GUARD: huwag ulitin setup kung na-run na dati
-  if (window.__smoochCartInit) return;
-  window.__smoochCartInit = true;
-
-  const STORAGE_KEY = "smoochCart";
-  let cart = [];
-
-  const cartIcon     = document.getElementById("cart-icon");
-  const cartCount    = document.getElementById("cart-count");
-  const cartModal    = document.getElementById("cart-modal");
-  const cartItems    = document.getElementById("cart-items");
-  const cartTotal    = document.getElementById("cart-total");
-  const cartClose    = document.getElementById("cart-close");
-  const cartCheckout = document.getElementById("cart-checkout");
-
-  // kung wala sa page (hal. ibang page), wag na mag-run
-  if (!cartIcon || !cartModal) return;
-
-  // --- helpers ---
-  function loadCart() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    cart = saved ? JSON.parse(saved) : [];
-  }
-
-  function saveCart() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-  }
-
-  function updateBadge() {
-    const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
-    cartCount.textContent = totalQty;
-  }
-
-  function renderCart() {
-    cartItems.innerHTML = "";
-    let total = 0;
-
-    if (cart.length === 0) {
-      cartItems.innerHTML = "<li>No items yet. Add something yummy! 🧋🍰</li>";
-    } else {
-      cart.forEach((item, index) => {
-        total += item.price * item.qty;
-
-        const li = document.createElement("li");
-        li.className = "cart-item-row";
-        li.dataset.index = index;
-
-        li.innerHTML = `
-          <div class="cart-item-main">
-            <span class="cart-item-name">${item.name}</span>
-            <span class="cart-item-price">P${item.price.toFixed(2)}</span>
-          </div>
-          <div class="cart-item-controls">
-            <input type="number" min="1" value="${item.qty}" class="cart-item-qty">
             <button class="cart-remove" title="Remove" type="button">&times;</button>
           </div>
         `;
@@ -417,8 +250,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Add to cart buttons (products page) + MINI FEEDBACK
   document.querySelectorAll(".add-to-cart").forEach(btn => {
     const card  = btn.closest(".product-card");
-    const name  = card?.dataset.name;
-    const price = parseFloat(card?.dataset.price || "0");
+    const name  = card?.dataset.name || btn.dataset.name;
+    const price = parseFloat(card?.dataset.price || btn.dataset.price || "0");
 
     const originalText = btn.textContent;
 
@@ -487,7 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderCart();
   });
 
-  // ✅ fake checkout – single handler lang kahit ilang beses mag-run script
+  // ✅ fake checkout – SINGLE handler lang
   if (cartCheckout) {
     cartCheckout.onclick = () => {
       if (!cart.length) {
