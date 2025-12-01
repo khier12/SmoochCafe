@@ -483,13 +483,14 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // fake checkout
-  cartCheckout.addEventListener("click", () => {
-    if (!cart.length) {
-      alert("Your cart is empty.");
-      return;
-    }
-    alert("Order placed! (demo only)");
-  });
+  // prevent double event binding
+cartCheckout.onclick = () => {
+  if (!cart.length) {
+    alert("Your cart is empty.");
+    return;
+  }
+  alert("Order placed! (demo only)");
+};
 
   // initial load
   loadCart();
