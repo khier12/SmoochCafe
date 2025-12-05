@@ -335,3 +335,42 @@ document.addEventListener("DOMContentLoaded", () => {
   loadCart();
   renderCart();
 });
+
+
+
+
+// Login Modal
+document.addEventListener("DOMContentLoaded", function () {
+  const openLoginButtons = document.querySelectorAll(".js-open-login");
+  const loginModal = document.getElementById("loginModal");
+  const closeLoginBtn = document.getElementById("closeLoginModal");
+
+  if (openLoginButtons.length && loginModal && closeLoginBtn) {
+    // open from ANY login button (mobile or desktop)
+    openLoginButtons.forEach(btn => {
+      btn.addEventListener("click", function (e) {
+        e.preventDefault();
+        loginModal.classList.add("show");
+      });
+    });
+
+    // close button
+    closeLoginBtn.addEventListener("click", function () {
+      loginModal.classList.remove("show");
+    });
+
+    // click outside modal card = close
+    loginModal.addEventListener("click", function (e) {
+      if (e.target === loginModal) {
+        loginModal.classList.remove("show");
+      }
+    });
+
+    // ESC key = close
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        loginModal.classList.remove("show");
+      }
+    });
+  }
+});
