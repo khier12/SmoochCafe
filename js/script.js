@@ -246,6 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- events ---
+
   // Add to cart buttons (products page) + MINI FEEDBACK
   document.querySelectorAll(".add-to-cart").forEach(btn => {
     const card  = btn.closest(".product-card");
@@ -326,13 +327,21 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Your cart is empty.");
         return;
       }
-      alert("Order placed!");
     };
   }
 
   // initial load
   loadCart();
   renderCart();
+});
+
+
+document.getElementById("cart-checkout").addEventListener("click", function () {
+  // Close cart modal (optional)
+  document.getElementById("cart-modal").setAttribute("aria-hidden", "true");
+
+  // Redirect to checkout page
+  window.location.href = "checkout.html";   // If inside /pages/
 });
 
 

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Checkout — Smooch Cafe</title>
+
+  <!-- main site css (page is in /pages/, so ../css/) -->
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+  <style>
+    /* Page layout: use flex so footer sits after content and main grows naturally */
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    main.container { flex: 1 0 auto; padding-top: 110px; padding-bottom: 60px; max-width: 980px; }
+
+    /* tiny page-specific overrides */
+    .checkout-grid { display: grid; grid-template-columns: 1fr 380px; gap: 28px; align-items: start; }
+    @media (max-width: 920px) {
+      .checkout-grid { grid-template-columns: 1fr; }
+      main.container { padding-top: 120px; }
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 18px;
+      border-radius: 12px;
+    }
+
+    .form-row { margin-bottom: 12px; display:flex; flex-direction:column; }
+    .form-row label { font-size:13px; margin-bottom:6px; color: rgba(255,255,255,0.92); }
+    .form-row input, .form-row textarea, .form-row select {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.05);
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    /* DELIVERY ADDRESS improvements */
+    #customerAddress {
+      min-height: 84px;             /* comfortably tall by default */
+      max-height: 220px;
+      resize: vertical;             /* let user expand vertically only */
+      line-height: 1.4;
+      padding: 12px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.06);
+      color: var(--text-light);
+      transition: box-shadow .15s, border-color .15s;
+    }
+    #customerAddress::placeholder { color: rgba(255,255,255,0.6); }
+
+    #customerAddress:focus {
+      outline: none;
+      border-color: rgba(240,76,69,0.9);
+      box-shadow: 0 6px 18px rgba(240,76,69,0.08);
+      background: rgba(0,0,0,0.03);
+    }
+
+    .address-meta {
+      display:flex;justify-content:space-between;align-items:center;margin-top:6px;
+      color: rgba(255,255,255,0.7); font-size:12px;
+    }
+    .address-meta .error { color: #ffb4b4; font-weight:700; display:none; }
+
+    /* Keep other rules below (select improvements) */
+    /* Improve native select look for most browsers */
+    .filter-select,
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-clip: padding-box;
+      color: #0b1b1d;               /* default closed text color (dark) */
+      background: #ffffff;         /* white control — keeps options readable */
+      border: 1px solid rgba(7,22,23,0.06);
+      padding: 10px 40px 10px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    /* Safari fix to ensure visible text */
+    .filter-select, select {
+      color: #f3f5f5;
+    }
+
+    /* arrow indicator */
+    .filter-select-wrap::after,
+    .select-wrap::after {
+      content: "";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+      width: 8px; height: 8px;
+      border-right: 2px solid var(--accent, #F04C45);
+      border-bottom: 2px solid var(--accent, #F04C45);
+      pointer-events: none;
+    }
+
+    /* attempt to style native options (works on many but NOT all) */
+    select option {
+      color: #0b1b1d;
+      background: #ffffff;
+      padding: 6px 8px;
+    }
+
+    /* disabled separator option */
+    select option[disabled] {
+      color: #6b7280;
+      background: #f7f7f7;
+    }
+
+    /* focus ring */
+    select:focus {
+      outline: none;
+      box-shadow: 0 6px 20px rgba(7,22,23,0.06);
+      border-color: var(--accent, #F04C45);
+    }
+
+    /* Delivery textarea improvements (use in page or global stylesheet) */
+    #addressRow { width: 100%; }                 /* ensure container doesn't limit width */
+    #customerAddress {
+      width: 100%;                               /* full width of column */
+      box-sizing: border-box;                    /* include padding in width */
+      min-height: 120px;                         /* comfortable default height */
+      max-height: 320px;                         /* allow growing to a reasonable limit */
+      resize: vertical;                          /* user can expand vertically */
+      overflow-y: auto;                          /* vertical scroll only when max-height reached */
+      line-height: 1.45;
+      padding: 12px 14px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.04);
+      color: var(--text-light);
+    }
+
+    /* Make sure the address-meta (counter and error) sits under the textarea and visible */
+    .address-meta { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:8px; flex-wrap:wrap; }
+    .address-meta .chars { color: rgba(255,255,255,0.78); font-size:13px; }
+    .address-meta .error { color: #ffb4b4; font-weight:700; display:none; font-size:13px; }
+
+    /* Optional: nicer small scrollbar for webkit browsers (won't break other browsers) */
+    #customerAddress::-webkit-scrollbar { width: 10px; }
+    #customerAddress::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.18); border-radius: 8px; }
+    #customerAddress::-webkit-scrollbar-track { background: transparent; }
+
+    /* Checkout message minor style (you already had this) */
+    #checkoutMessage {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text-light);
+    }
+    #checkoutMessage strong { font-size: 15px; }
+
+  </style>
+</head>
+<body id="top">
+
+  <!-- HEADER -->
+  <header>
+    <div class="container header-container">
+      <a href="../index.html" class="logo" aria-label="Smooch Cafe home">
+        <img src="../images/logo.png" alt="SMOOCH CAFE logo" class="logo-img" />
+      </a>
+
+      <!-- CART & Burger Container-->
+      <div class="header-right">
+        <!-- CART ICON -->
+        <div class="cart-icon"
+     id="cart-icon"
+     role="button"
+     tabindex="0"
+     aria-label="View cart"
+     aria-expanded="false">
+  <i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>
+  <span id="cart-count">0</span>
+</div>
+      
+        <!-- HAMBURGER -->
+        <button class="nav-toggle" aria-expanded="false">
+            <span class="bars"><span></span><span></span><span></span></span>
+        </button>
+      </div>
+      
+
+      <nav class="nav-menu" id="primary-nav" aria-label="Primary navigation">
+        <ul>
+          <li><a href="../index.html">Home</a></li>
+          <!-- diretso na sa food section -->
+          <li><a href="../pages/products.html">Products</a></li>
+          <li><a href="#footer">Locations</a></li>
+          <li><a href="#footer">Contact</a></li>
+        </ul>
+
+        <!-- mobile-only buttons -->
+        <div class="nav-buttons mobile-buttons">
+          <a href="#" class="btn btn-secondary js-open-login">Login</a>
+          <a href="#footer" class="btn btn-primary">Order Online</a>
+        </div>
+      </nav>
+
+      <!-- desktop-only buttons -->
+      <div class="nav-buttons desktop-buttons">
+        <a href="#" class="btn btn-secondary js-open-login">Login</a>
+        <a href="#footer" class="btn btn-primary">Order Online</a>
+      </div>
+    </div>
+
+    <div class="nav-overlay" aria-hidden="true"></div>
+  </header>
+
+  <main class="container" id="checkoutMain">
+    <div class="section-header" style="text-align:left; margin-bottom:1.6rem;">
+      <div class="section-subtitle">Checkout</div>
+      <h2 class="section-title">Complete your order</h2>
+      <p class="section-desc">Review your items and fill in delivery or pick-up details.</p>
+    </div>
+
+    <div class="checkout-grid">
+      <!-- LEFT: customer form -->
+      <section class="checkout-form card" aria-labelledby="customer-details-heading">
+        <h3 id="customer-details-heading" style="margin-bottom:12px;">Customer details</h3>
+
+        <form id="checkoutForm" novalidate>
+          <div class="form-row">
+            <label for="customerName">Full name</label>
+            <input id="customerName" name="name" required placeholder="Juan dela Cruz" autocomplete="name" />
+          </div>
+
+          <div class="form-row">
+            <label for="customerPhone">Phone</label>
+            <input id="customerPhone" name="phone" required placeholder="09xx xxx xxxx" autocomplete="tel" />
+          </div>
+
+          <div class="form-row">
+            <label for="customerEmail">Email (optional)</label>
+            <input id="customerEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+
+          <div class="form-row">
+            <label for="orderType">Order type</label>
+            <select id="orderType" required>
+              <option value="pickup">Pick up at store</option>
+              <option value="delivery">Delivery</option>
+            </select>
+          </div>
+
+          <!-- Improved delivery address row -->
+          <div id="addressRow" style="display:none;" class="form-row" aria-live="polite">
+            <label for="customerAddress">Delivery address</label>
+            <textarea id="customerAddress"
+                      name="address"
+                      placeholder="House/Building, Street, Barangay, City — e.g. 22 Magnolia St., Barangay San Roque, Makati"
+                      maxlength="350"
+                      autocomplete="street-address"
+                      aria-describedby="addressMeta"></textarea>
+          
+            <div class="address-meta" id="addressMeta">
+              <div class="chars"><span id="addrCount">0</span>/350</div>
+              <div class="error" id="addrError">Please enter a valid delivery address (min 12 characters).</div>
+            </div>
+          </div>
+          
+
+          <div class="form-row">
+            <label for="paymentMethod">Payment</label>
+            <select id="paymentMethod" required>
+              <option value="cod">Cash on delivery / pickup</option>
+              <option value="card">Card (will be processed on checkout)</option>
+            </select>
+          </div>
+
+          <div style="margin-top:18px; display:flex; gap:10px; align-items:center;">
+            <button type="submit" class="btn btn-primary">Place order</button>
+            <a href="products.html" class="btn btn-secondary" style="text-decoration:none;">Back to menu</a>
+          </div>
+        </form>
+
+        <div id="checkoutMessage" aria-live="polite"></div>
+      </section>
+
+      <!-- RIGHT: order summary -->
+      <aside class="order-summary card" aria-labelledby="order-summary-heading">
+        <h3 id="order-summary-heading" style="margin-bottom:12px;">Order summary</h3>
+
+        <ul id="checkoutItems" aria-live="polite"></ul>
+
+        <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:10px;">
+          <span>Subtotal</span>
+          <span id="checkoutSubtotal">P0.00</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+          <span>Delivery fee</span>
+          <span id="checkoutDelivery">P0.00</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:1.05rem; font-weight:900; border-top:1px dashed rgba(255,255,255,0.06); padding-top:12px;">
+          <span>Total</span>
+          <span id="checkoutTotal">P0.00</span>
+        </div>
+
+        <div style="margin-top:12px; font-size:13px; color:rgba(255,255,255,0.8)">
+          Tip: Cash on delivery/pickup is accepted. For card payments you’ll be redirected to a payment page in a production setup.
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>About SMOOCH CAFE</h3>
+          <p style="color: var(--coffee-accent); margin-bottom: 20px;">
+            Black Tea & Coffee lovers dedicated to quality, sustainability, and the perfect cup.
+          </p>
+          <div class="social-links">
+            <a href="https://www.facebook.com/profile.php?id=61580172486900" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/smoochcafeph/" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" target="_blank"><i class="fa-brands fa-pinterest"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="../index.html">Back to Home</a></li>
+            <li><a href="#food">Food Menu</a></li>
+            <li><a href="#pastry">Pastry Menu</a></li>
+            <li><a href="#drinks">Drinks Menu</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column">
+          <h3>Contact Us</h3>
+          <ul class="footer-links">
+            <li><i class="fa-solid fa-location-dot"></i> <a href="https://maps.app.goo.gl/HBGzVzqp3p1uxhrm6" target="_blank" style="color:white">447 JM Loyola Street, Carmona, Cavite</a></li>
+            <li><i class="fa-solid fa-phone"></i> <a href="tel:+639657608290" style="color:white">(0965) 760 8290</a></li>
+            <li><i class="fa-solid fa-envelope"></i> <a href="mailto:smoochcafe25@gmail.com" target="_blank" style="color:white">smoochcafe25@gmail.com</a></li>
+            <li><i class="fa-solid fa-clock"></i> Mon-Sun: 2 PM - 11 PM</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="copyright footer-links">
+        &copy; 2025 WITMWD3M2
+        <a href="https://www.facebook.com/khier.dixon/" target="_blank">Group3</a>. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- main site script (paths: this file is /pages/, so ../js/) -->
+  <script src="../js/script.js"></script>
+
+  <!-- page-specific script -->
+  <script>
+    (function () {
+      /* ====== NOTE: removed JS that set exact main height; layout handled by CSS flex above ====== */
+
+      /* ====== existing cart + form logic kept exactly as before ====== */
+      const STORAGE_KEY = "smoochCart";
+      const itemsEl = document.getElementById('checkoutItems');
+      const subtotalEl = document.getElementById('checkoutSubtotal');
+      const totalEl = document.getElementById('checkoutTotal');
+      const deliveryEl = document.getElementById('checkoutDelivery');
+
+      const orderType = document.getElementById('orderType');
+      const addressRow = document.getElementById('addressRow');
+      const addressInput = document.getElementById('customerAddress');
+      const addrCount = document.getElementById('addrCount');
+      const addrError = document.getElementById('addrError');
+
+      function getCart() {
+        try {
+          const saved = localStorage.getItem(STORAGE_KEY);
+          return saved ? JSON.parse(saved) : [];
+        } catch (e) {
+          console.error('Failed to parse cart', e);
+          return [];
+        }
+      }
+
+      function formatPeso(n) {
+        return 'P' + Number(n).toFixed(2);
+      }
+
+      function renderCart() {
+        const cart = getCart();
+        itemsEl.innerHTML = '';
+        let subtotal = 0;
+        if (!cart.length) {
+          itemsEl.innerHTML = '<li style="padding:8px 0;">Your cart is empty — add items first.</li>';
+        } else {
+          cart.forEach(item => {
+            const lineTotal = (item.price || 0) * (item.qty || 1);
+            subtotal += lineTotal;
+
+            const li = document.createElement('li');
+            li.innerHTML = `
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="min-width:0;">
+                  <div style="font-weight:700;">${escapeHtml(item.name)}</div>
+                  <div style="font-size:13px; color: rgba(255,255,255,0.7);">Qty: ${item.qty}</div>
+                </div>
+              </div>
+              <div style="text-align:right; min-width:88px;">
+                <div style="font-weight:700;">${formatPeso(lineTotal)}</div>
+                <div style="font-size:12px; color: rgba(255,255,255,0.6);">P${Number(item.price).toFixed(2)} each</div>
+              </div>
+            `;
+            itemsEl.appendChild(li);
+          });
+        }
+
+        const deliveryFee = (orderType.value === 'delivery' && cart.length) ? 40 : 0;
+        subtotalEl.textContent = formatPeso(subtotal);
+        deliveryEl.textContent = formatPeso(deliveryFee);
+        totalEl.textContent = formatPeso(subtotal + deliveryFee);
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+      }
+
+      // show/hide address and focus
+      orderType.addEventListener('change', () => {
+        const isDelivery = (orderType.value === 'delivery');
+        addressRow.style.display = isDelivery ? 'block' : 'none';
+        // reset error when toggling
+        addrError.style.display = 'none';
+        // focus the textarea when it becomes visible
+        if (isDelivery) {
+          // small timeout to allow transition/layout before focus (helps mobile)
+          setTimeout(() => {
+            addressInput.focus();
+          }, 80);
+        }
+        renderCart();
+      });
+
+      // initial render
+      renderCart();
+
+      // address live counter
+      addressInput.addEventListener('input', () => {
+        const len = addressInput.value.trim().length;
+        addrCount.textContent = len;
+        if (len >= 12) {
+          addrError.style.display = 'none';
+        }
+      });
+
+      // form submit handler
+      const form = document.getElementById('checkoutForm');
+      const msgEl = document.getElementById('checkoutMessage');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const cart = getCart();
+        if (!cart.length) {
+          alert('Your cart is empty.');
+          return;
+        }
+
+        const name = document.getElementById('customerName').value.trim();
+        const phone = document.getElementById('customerPhone').value.trim();
+        const email = document.getElementById('customerEmail').value.trim();
+        const addr = addressInput.value.trim();
+        const pay = document.getElementById('paymentMethod').value;
+        const type = orderType.value;
+
+        if (!name || !phone) {
+          alert('Please enter your name and phone number.');
+          return;
+        }
+        if (type === 'delivery') {
+          // require a minimum practical address length for delivery
+          if (!addr || addr.length < 12) {
+            addrError.style.display = 'block';
+            addrError.textContent = 'Please enter a valid delivery address (min 12 characters).';
+            addressInput.focus();
+            return;
+          }
+        }
+
+        // compute totals
+        const subtotal = cart.reduce((s, it) => s + ((it.price||0) * (it.qty||1)), 0);
+        const deliveryFee = (type === 'delivery') ? ((cart.length) ? 40 : 0) : 0;
+        const total = subtotal + deliveryFee;
+
+        // create order
+        const order = {
+          id: 'ORD' + Date.now(),
+          createdAt: new Date().toISOString(),
+          customer: { name, phone, email, address: (type === 'delivery') ? addr : null },
+          items: cart,
+          orderType: type,
+          paymentMethod: pay,
+          subtotal: subtotal,
+          deliveryFee: deliveryFee,
+          total: total
+        };
+
+        // store order history
+        try {
+          const orders = JSON.parse(localStorage.getItem('smoochOrders') || '[]');
+          orders.push(order);
+          localStorage.setItem('smoochOrders', JSON.stringify(orders));
+        } catch (err) {
+          console.error('Failed to save order', err);
+        }
+
+        // clear cart
+        localStorage.removeItem(STORAGE_KEY);
+
+        // update badge if global helper exists
+        if (window.updateCartBadge) {
+          try { window.updateCartBadge(); } catch (e) { /* ignore */ }
+        } else {
+          // fallback: update cart-count if present
+          const cc = document.getElementById('cart-count');
+          if (cc) cc.textContent = '0';
+        }
+
+        // success message
+        msgEl.style.display = 'block';
+        msgEl.className = 'success';
+        msgEl.innerHTML = `
+          <strong>Thanks, ${escapeHtml(name)}!</strong>
+          <div>Your order <strong>${order.id}</strong> was placed.</div>
+          <div style="margin-top:6px;">Estimated total: <strong>${formatPeso(order.total)}</strong></div>
+        `;
+
+        // refresh summary to show empty cart
+        renderCart();
+
+        // optionally: redirect after a short delay (commented out)
+        // setTimeout(() => window.location.href = 'products.html', 2200);
+      });
+    })();
+  </script>
+</body>
+</html>
