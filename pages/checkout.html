@@ -164,6 +164,34 @@
     }
     #checkoutMessage strong { font-size: 15px; }
 
+    /* make place-order button and back-to-menu anchor match exactly */
+.checkout-form .btn,
+.checkout-form a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;            /* same visual height for both */
+  box-sizing: border-box;
+  padding: 8px 18px;       /* identical horizontal padding */
+  line-height: 1;          /* avoid extra vertical spacing */
+  font-size: 15px;         /* unify text size */
+  vertical-align: middle;
+}
+
+/* optional: make primary and secondary look consistent (border radius etc) */
+.checkout-form .btn {
+  border-radius: 22px;     /* match your pill style */
+}
+
+/* keep the spacing between them */
+.checkout-form .btn + .btn,
+.checkout-form .btn + a.btn {
+  margin-left: 12px;
+}
+
+.checkout-form label {
+    font-size: 1em;
+}
   </style>
 </head>
 <body id="top">
