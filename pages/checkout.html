@@ -319,6 +319,49 @@
     </div>
   </main>
 
+
+
+<!-- Login Modal -->
+<div class="modal-overlay" id="loginModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeLoginModal">&times;</button>
+  
+      <h2 class="modal-title">Welcome back</h2>
+      <p class="modal-subtitle">Sign in to enjoy your favorite Smooch Café treats.</p>
+  
+      <form class="modal-form">
+        <div class="modal-input-group">
+          <label for="loginEmail">Email</label>
+          <div class="modal-input-wrapper">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+          </div>
+        </div>
+  
+        <div class="modal-input-group">
+          <label for="loginPassword">Password</label>
+          <div class="modal-input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="loginPassword" placeholder="••••••••" required>
+          </div>
+        </div>
+  
+        <div class="modal-extra">
+          <label class="remember-me">
+            <input type="checkbox">
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="modal-link">Forgot password?</a>
+        </div>
+  
+        <button type="submit" class="btn btn-primary modal-btn">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+
+
   <!-- FOOTER -->
   <footer id="footer">
     <div class="container">
@@ -546,14 +589,10 @@
           <div>Your order <strong>${order.id}</strong> was placed.</div>
           <div style="margin-top:6px;">Estimated total: <strong>${formatPeso(order.total)}</strong></div>
         `;
-
-        // refresh summary to show empty cart
         renderCart();
-
-        // optionally: redirect after a short delay (commented out)
-        // setTimeout(() => window.location.href = 'products.html', 2200);
       });
     })();
   </script>
+  <script src="../js/script.js"></script>
 </body>
 </html>
