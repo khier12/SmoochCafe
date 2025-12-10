@@ -335,14 +335,19 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCart();
 });
 
+// safe: only attach when the element exists on the page
+const cartCheckoutBtn = document.getElementById("cart-checkout");
+if (cartCheckoutBtn) {
+  cartCheckoutBtn.addEventListener("click", function () {
+    // Close cart modal (optional)
+    const cm = document.getElementById("cart-modal");
+    if (cm) cm.setAttribute("aria-hidden", "true");
 
-document.getElementById("cart-checkout").addEventListener("click", function () {
-  // Close cart modal (optional)
-  document.getElementById("cart-modal").setAttribute("aria-hidden", "true");
+    // Redirect to checkout page
+    window.location.href = "checkout.html";
+  });
+}
 
-  // Redirect to checkout page
-  window.location.href = "checkout.html";   // If inside /pages/
-});
 
 
 
