@@ -1287,3 +1287,59 @@ html {
     font-size: 21px;
   }
 }
+
+
+
+/* ======================
+   BACK TO TOP BUTTON
+====================== */
+#backToTop {
+  position: fixed;
+  bottom: 26px;
+  right: 26px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: none;
+
+  background: var(--coffee-gold);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 0.25s ease, transform 0.25s ease, background 0.2s;
+  z-index: 3000;
+}
+
+#backToTop.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+#backToTop:hover {
+  background: #c33b38;
+  transform: translateY(-3px);
+}
+
+#backToTop .arrow {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Mobile: smaller & cleaner */
+@media (max-width: 768px) {
+  #backToTop {
+    bottom: 18px;
+    right: 18px;
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
